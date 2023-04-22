@@ -37,7 +37,7 @@ class Calculator extends Component {
     const clickedValue = event.target.textContent;
     if (clickedValue === "=") {
       this.calculate(this.state.displayValue);
-    } else if (clickedValue === "clear") {
+    } else if (clickedValue === "C") {
       this.setState({ displayValue: "0" });
     } else {
       let lastDisplayValue = this.state.displayValue;
@@ -55,8 +55,11 @@ class Calculator extends Component {
         <div className="row first">
           <KeyButton
             handleClick={this.handleClick}
-            buttonValue="clear"
-            islong={true}
+            buttonValue="C"
+          />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="0"
           />
           <KeyButton
             handleClick={this.handleClick}
