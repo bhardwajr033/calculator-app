@@ -6,35 +6,98 @@ import "./Calculator.css";
 
 class Calculator extends Component {
   state = {
-    displayValue : "0"
+    displayValue: "0",
+  };
+
+  calculate(expression) {
+    for (let index = 0; index < expression.length; index++) {
+      if (expression.charAt(index) === "×") {
+        expression = setCharAt(expression, index, "*");
+      } else if (expression.charAt(index) === "÷") {
+        expression = setCharAt(expression, index, "/");
+      }
+    }
+
+    function setCharAt(str, index, chr) {
+      if (index > str.length - 1) return str;
+      return str.substring(0, index) + chr + str.substring(index + 1);
+    }
+    try {
+      let result = eval(expression).toFixed(2).toString();
+      if (result.split(".")[1] === "00") {
+        result = result.split(".")[0];
+      }
+      this.setState({ displayValue: result });
+    } catch (err) {
+      this.setState({ displayValue: "Error" });
+    }
+  }
+
+  handleClick = (event) => {
+    const clickedValue = event.target.textContent;
+    if (clickedValue === "=") {
+      this.calculate(this.state.displayValue);
+    } else if (clickedValue === "clear") {
+      this.setState({ displayValue: "0" });
+    } else {
+      let lastDisplayValue = this.state.displayValue;
+      if (lastDisplayValue === "0" || lastDisplayValue === "Error") {
+        lastDisplayValue = "";
+      }
+      this.setState({ displayValue: lastDisplayValue + clickedValue });
+    }
   };
 
   render() {
     return (
       <section className="calulator-body">
-        <DisplayBar displayValue={this.state.displayValue}/>
+        <DisplayBar displayValue={this.state.displayValue} />
         <div className="row first">
-          <KeyButton buttonValue="clear" islong={true} />
-          <KeyButton buttonValue="=" isRed={true} />
-          <KeyButton buttonValue="+" isRed={true} />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="clear"
+            islong={true}
+          />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="="
+            isRed={true}
+          />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="+"
+            isRed={true}
+          />
         </div>
         <div className="row second">
-          <KeyButton buttonValue="7" />
-          <KeyButton buttonValue="8" />
-          <KeyButton buttonValue="9" />
-          <KeyButton buttonValue="-" isRed={true} />
+          <KeyButton handleClick={this.handleClick} buttonValue="7" />
+          <KeyButton handleClick={this.handleClick} buttonValue="8" />
+          <KeyButton handleClick={this.handleClick} buttonValue="9" />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="-"
+            isRed={true}
+          />
         </div>
         <div className="row third">
-          <KeyButton buttonValue="4" />
-          <KeyButton buttonValue="5" />
-          <KeyButton buttonValue="6" />
-          <KeyButton buttonValue="*" isRed={true} />
+          <KeyButton handleClick={this.handleClick} buttonValue="4" />
+          <KeyButton handleClick={this.handleClick} buttonValue="5" />
+          <KeyButton handleClick={this.handleClick} buttonValue="6" />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="×"
+            isRed={true}
+          />
         </div>
         <div className="row fourth">
-          <KeyButton buttonValue="1" />
-          <KeyButton buttonValue="2" />
-          <KeyButton buttonValue="3" />
-          <KeyButton buttonValue="/" isRed={true} />
+          <KeyButton handleClick={this.handleClick} buttonValue="1" />
+          <KeyButton handleClick={this.handleClick} buttonValue="2" />
+          <KeyButton handleClick={this.handleClick} buttonValue="3" />
+          <KeyButton
+            handleClick={this.handleClick}
+            buttonValue="÷"
+            isRed={true}
+          />
         </div>
       </section>
     );
